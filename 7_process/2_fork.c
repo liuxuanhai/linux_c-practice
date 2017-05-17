@@ -5,8 +5,22 @@
 *   breif：   to show: 父子进程拥有独立的地址空间。变量k父子进程中是独立的。
 *   history：2017-05-17 renbin.guo created.
 *   note：
-*
-================================================================*/
+		usage:
+		[root@grb_host 7_process]# ./2
+
+		Process Creation Study
+		Parent process is running
+		Child process is running
+		Parent process is running
+		Child process is running
+		Parent process is running
+		Child process is running
+		Parent process is running
+		Parent process is running
+
+		[root@grb_host 7_process]#		
+ *
+ ================================================================*/
 #include <stdio.h>
 #include <sys/types.h>
 #include <unistd.h>
