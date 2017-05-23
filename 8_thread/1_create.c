@@ -6,12 +6,21 @@
 *   history：2017-05-19 renbin.guo created.
 *   note：
 *   usage：
+*   	 gcc 1_create.c  -o 1 -lpthread
+*   	 [root@grb_host 8_thread]# ./1
+*   	 main thead id = 2078766848
+*   	 [root@grb_host 8_thread]# 
+*
+* 	bug: 并没有打印出print_id,线程1没有被启动啊
+*
+*   	 
 *
 ================================================================*/
 
 #include<stdio.h>
 #include<unistd.h>
-#incldude<pthread.h>
+#include<pthread.h>
+#include<pthread.h>
 
 void  print_id()
 {
@@ -21,7 +30,10 @@ int main(int argc, char const *argv[])
 {
 	pthread_t thid;
 	printf("main thead id = %d\n", pthread_self());
-	if(pthread_create(&thid,NULL,print_id,NULL)  !=NULL)
+	
+	//  int pthread_create(pthread_t *thread, const pthread_attr_t *attr,
+	//                            void *(*start_routine) (void *), void *arg);
+	if(pthread_create(&thid,NULL,(void *)print_id,NULL)  !=NULL)
 	{
 		printf("creatd failed");
 		exit(1);
