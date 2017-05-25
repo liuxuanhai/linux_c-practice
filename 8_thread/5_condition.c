@@ -5,7 +5,28 @@
 *   breif：条件变量的用法
 *   history：renbin.guo created 2017-05-24
 *   note：
+*   	confuse:
+*			pthread_cleanup_push()
+*			和
+*			pthread_cleanup_pop()
+*			的作用是什么?
+*		就是push和pop之间的代码，如果异常终止，那么他们就会调用push中的回到函数，释放锁。那为什么thread2中不设置呢?
+*
 *   usage：
+*   	
+*   	[root@grb_host 8_thread]# ./5 
+*   	thread2 is running
+*   	thread1 is running
+*   	thread2 applied the condition
+*   	thread1 applied the condition
+*   	thread2 is running
+*   	thread2 applied the condition
+*   	thread1 is running
+*   	thread1 applied the condition
+*   	thread2 is running
+*
+* 		线程1,2能正确的互斥的到条件变量,从而执行
+*
 *
 ================================================================*/
 
@@ -16,26 +37,38 @@
 pthread_mutex_t mutex;	// 互斥锁
 pthread_cond_t	cond;	// 条件变量
 
-void* pthread1(void*arg)
+void* thread1(void*arg)
 {
-	/* 解锁 */
+	/* 注册回调函数 */
 	pthread_cleanup_push(pthread_mutex_unlock,&mutex);	
 
 	while(1)
 	{
 			printf("thread1 is running\n");
-			// 加锁
-			pthread_mutex_unlock(&mutex);
+			// 解锁
+			pthread_mutex_lock(&mutex);
+			pthread_cond_wait(&cond,&mutex);	// 等待条件变量
+			printf("thread1 applied the condition\n");  // 获得条件变量
+		 	pthread_mutex_unlock(&mutex); // 解锁 ,注销掉这句试试,这样的话线程1也永远得不到锁了
 
-			// 等待条件变量
-			pthread_cond_wait(&cond,&mutex);
-			printf("thread1 applied the condition\n");
-			pthread_mutex_unlock(&mutex); // 解锁
-			sleep(4);
+			sleep(1);
 	}
 	pthread_cleanup_pop(0);
 }
 
+void* thread2(void *arg)
+{
+	while(1)
+	{
+		printf("thread2 is running\n");
+		
+		pthread_mutex_lock(&mutex);   // 加锁,对pthread_cond_wait函数加锁,它只能互斥执行
+		pthread_cond_wait(&cond,&mutex);  //等待条件变量
+		printf("thread2 applied the condition\n"); // 获得条件变量
+		pthread_mutex_unlock(&mutex);	// 解锁
+		sleep(1);
+	}
+}
 int main(int argc, char *argv[])
 {
 	pthread_t tid1;
