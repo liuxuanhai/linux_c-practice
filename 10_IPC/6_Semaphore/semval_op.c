@@ -14,7 +14,7 @@ int semval_op(int semid, int index, int cmd)
 		if(index < 0)
 				error_handler("index invaid\n");
 
-		/* 或者和设置单个信号 */
+		/* 获取和设置单个信号 */
 		if(cmd == GETVAL || cmd == SETVAL)
 
 				/* 		int semctl(int semid, int semnum, int cmd, ...);	
@@ -22,7 +22,8 @@ int semval_op(int semid, int index, int cmd)
 				 *
 				 *
 				 * */
-				
+
+				/* semid和index不是一样的么 */				
 				return semctl(semid,index,cmd,0);
 
 		printf("cannot surport cmd :%d\n",cmd);
