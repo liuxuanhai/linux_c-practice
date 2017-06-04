@@ -7,7 +7,17 @@
 *   history：		2017-06-04renbin.guo created
 *   note：		
 *   				
-*   usage：		
+*   			[root@grb_host 6_Semaphore]# ./server3 
+*   			0 times sem succussful!
+*   			1 times sem succussful!
+*   			2 times sem succussful!
+*   			3 times sem succussful!
+*   			4 times sem succussful!
+*   			semop error
+*
+*   			[root@grb_host 6_Semaphore]# 
+*
+*
 *
 ================================================================*/
 
@@ -23,6 +33,7 @@ void error_handler(char *s)
 }
 int main(int argc, char *argv[])
 {
+		int count = 0;
 		key_t	key;
 		int		semid;
 		struct	sembuf	sbuf = {0,-1,IPC_NOWAIT};
@@ -46,11 +57,14 @@ int main(int argc, char *argv[])
 
 		while(1)
 		{
+
 				/* 执行PV操作中的P操作,递减信号量 */
 				/* 这是因为前面初始化的时候为-1 */
 				//sbuf = {0,-1,IPC_NOWAIT}; 
 				if( semop(semid,&sbuf,1) == -1)
 					error_handler("semop error\n");
+				else	
+						printf("%d times sem succussful!\n",count++);
 				sleep(3);
 		}
 		exit(0);
@@ -60,6 +74,5 @@ int main(int argc, char *argv[])
 
 
 				
-}
 
 
