@@ -33,6 +33,7 @@ int main(int argc, char const *argv[])
 	
 	//  int pthread_create(pthread_t *thread, const pthread_attr_t *attr,
 	//                            void *(*start_routine) (void *), void *arg);
+	//                            /* 注意这里将print_id函数指针作了一次类型转换,转为了(void*) */
 	if(pthread_create(&thid,NULL,(void *)print_id,NULL)  !=NULL)
 	{
 		printf("creatd failed");
