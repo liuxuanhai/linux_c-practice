@@ -2,7 +2,7 @@
 *   Copyright (C) 2017 free for learn.
 *   
 *   file：1_pipe.c
-*   breif：	管道的创建
+*   breif：	 管道用于有亲属关系的进程间通信（父子进程).
 *   history：renbin.guo created 2017-05-31
 *   note：
 *   usage：
