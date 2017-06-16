@@ -80,7 +80,7 @@ int main(int argc, char const *argv[])
 		fgets(msgbuffer.ctrlstring,BUF_SIZE,stdin);
 				/* 如果本端输入了exit则删除消息队列，并退出进程 */
 
-		if(!strncmp("exit",msgbuffer.ctrlstring,4))		//这个地方尽量还是写成 == 0 ,刻度线好点
+		if(!strncmp("exit",msgbuffer.ctrlstring,4))		//这个地方尽量还是写成 == 0 ,可读性好点
 		{
 			printf("inputed exit\n");
 			msgctl(qid,IPC_RMID,NULL);
@@ -95,7 +95,7 @@ int main(int argc, char const *argv[])
 		
 		//printf("msgsended!\n");	//for debug
 		
-		/* 2.接着从读取并打印客户端的消息,CLIENT_MSG做参数 */
+		/* 2.接着从读取并打印客户端的消息,CLIENT_MSG做参数 */         //      这里也是阻塞的，如果没有可读的消息，则阻塞
 		if( msgrcv(qid,&msgbuffer,BUF_SIZE,CLIENT_MSG,0) == -1)			//这里必须写成 == -1 ,因为成功是返回读到的字节数
 				error_handler("msgrcv error!\n");
 		printf("client: %s\n",msgbuffer.ctrlstring);

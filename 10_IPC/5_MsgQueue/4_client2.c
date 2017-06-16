@@ -54,7 +54,7 @@ int main(void)
 		{
 				/* 1. 通过消息队列从服务器获得消息,并打印 */
 				printf ("begin to rcv: \n" );  
-				if (msgrcv(qid,&msgbuffer,BUF_SIZE,SERVER_MSG,0) == -1)
+				if (msgrcv(qid,&msgbuffer,BUF_SIZE,SERVER_MSG,0) == -1)         //      这里也是阻塞的，如果没有可读的消息，则阻塞
 				{
 						perror ("Server msgrcv error!\n");
 						exit (1);
@@ -63,7 +63,7 @@ int main(void)
 
 				/* 2. 从键盘输入聊天信息发送给服务器 */
 				printf ("me(client): ");
-				fgets ( msgbuffer.ctrlstring, BUF_SIZE, stdin);
+				fgets ( msgbuffer.ctrlstring, BUF_SIZE, stdin);     // 注意这里是阻塞的，你不输入信息，就不向后执行了。
 				if (strncmp ("exit", msgbuffer.ctrlstring, 4) == 0) 
 				{
 						break;
